@@ -6,6 +6,8 @@ import 'package:commuication/pages/chat-room/chat_rooms_screen.dart';
 import 'package:commuication/pages/message/message_page.dart';
 import 'package:commuication/pages/page.dart';
 import 'package:commuication/providers/chat/chat_screen_provider.dart';
+import 'package:commuication/static/app_colors.dart';
+import 'package:commuication/static/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

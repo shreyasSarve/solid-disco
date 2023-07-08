@@ -31,7 +31,7 @@ class _ChatRoomsScreenState extends State<ChatRoomsScreen> {
       decoration: const BoxDecoration(
         border: Border(
           right: BorderSide(
-            width: 0.5,
+            width: 0.05,
             color: AppColors.white,
           ),
         ),
@@ -51,7 +51,7 @@ class _ChatRoomsScreenState extends State<ChatRoomsScreen> {
                         "Chat Rooms",
                       ),
                       backgroundColor: AppColors.backgroundColor,
-                      elevation: 0.0,
+                      elevation: 0,
                       shadowColor: AppColors.white,
                     );
                   }

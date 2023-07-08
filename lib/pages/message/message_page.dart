@@ -2,6 +2,7 @@
 
 library message_page;
 
+import 'package:commuication/helper/dev_tools.dart';
 import 'package:commuication/main.dart';
 import 'package:commuication/models/conf/message_args.dart';
 import 'package:commuication/models/extn/date_time_extention.dart';
@@ -35,30 +36,18 @@ class _MessagePageState extends State<MessagePage> {
   final FocusNode _focusNode = FocusNode();
   late final MessageScreenArgs args;
   late final MessagePageProvider provider;
-  void _addMessage() {
-    messages.add(
-      Message(text: _messageController.text.trim(), user: currentUser),
-    );
-    _togleUser();
-    setState(() {});
-    _messageController.clear();
-  }
 
-  void _togleUser() {
-    if (currentUser == User.phone) {
-      currentUser = User.laptop;
-    } else {
-      currentUser = User.phone;
-    }
+  void _addMessage() {
+    final message =
+        Message(text: _messageController.text.trim(), user: currentUser);
+    provider.addMessage(message);
+    Log.i("Message added");
+    _messageController.clear();
   }
 
   @override
   void initState() {
     super.initState();
-    _messageController.addListener(() {
-      canSend = _messageController.text.trim().isNotEmpty;
-      setState(() {});
-    });
     provider = Provider.of<MessagePageProvider>(context, listen: false);
     args = provider.args;
   }
@@ -104,9 +93,9 @@ class _MessagePageState extends State<MessagePage> {
                             height: 10,
                           ),
                           itemBuilder: (_, index) => _MessageWidget(
-                            message: messages[index],
+                            message: value.messages[index],
                           ),
-                          itemCount: messages.length,
+                          itemCount: value.messages.length,
                           scrollDirection: Axis.vertical,
                         ),
                       ),
@@ -115,22 +104,6 @@ class _MessagePageState extends State<MessagePage> {
                       margin: const EdgeInsets.only(top: 10),
                       child: Row(
                         children: [
-                          InkWell(
-                            splashFactory: InkSparkle.splashFactory,
-                            radius: 25,
-                            onTap: () {
-                              _togleUser();
-                              setState(() {});
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: AppColors.black,
-                              child: Icon(
-                                currentUser == User.laptop
-                                    ? Icons.laptop
-                                    : Icons.phone_android_rounded,
-                              ),
-                            ),
-                          ),
                           Expanded(
                             child: Container(
                               decoration: BoxDecoration(
@@ -149,6 +122,17 @@ class _MessagePageState extends State<MessagePage> {
                                 controller: _messageController,
                                 cursorColor: Colors.white,
                                 decoration: InputDecoration(
+                                  suffixIconColor: AppColors.white,
+                                  suffixIcon: InkWell(
+                                    onTap: () {
+                                      //todo: attach file...
+                                    },
+                                    child: const Icon(
+                                      Icons.attach_file_rounded,
+                                      size: 20,
+                                      color: AppColors.white,
+                                    ),
+                                  ),
                                   border: InputBorder.none,
                                   hintText: "Write text",
                                   hintStyle: TextStyle(
