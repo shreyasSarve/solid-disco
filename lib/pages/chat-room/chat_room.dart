@@ -12,6 +12,7 @@ class Room extends StatefulWidget {
 
 class _RoomState extends State<Room> {
   Color bgColor = AppColors.backgroundColor;
+  Color textColor = AppColors.textColor;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,6 +25,7 @@ class _RoomState extends State<Room> {
         onHover: (hover) {
           bgColor =
               hover ? AppColors.lightBackground : AppColors.backgroundColor;
+          textColor = hover ? AppColors.textColor : AppColors.textColor;
           setState(() {});
         },
         onTap: () {
@@ -33,7 +35,8 @@ class _RoomState extends State<Room> {
           provider.changeMessageScreen(arg);
           provider.changeToMessageScreen();
         },
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 0),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: bgColor,
@@ -43,7 +46,7 @@ class _RoomState extends State<Room> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircleAvatar(
-                backgroundColor: Colors.red.withOpacity(0.1),
+                backgroundColor: AppColors.errorColor.withOpacity(0.1),
                 radius: 15,
                 child: Text(
                   widget.chatRoom.name[0],
@@ -61,6 +64,10 @@ class _RoomState extends State<Room> {
               Text(
                 widget.chatRoom.name,
                 overflow: TextOverflow.fade,
+                style: AppTextTheme.bold.copyWith(
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),

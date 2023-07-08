@@ -2,7 +2,6 @@
 
 library message_page;
 
-import 'package:commuication/helper/dev_tools.dart';
 import 'package:commuication/main.dart';
 import 'package:commuication/models/conf/message_args.dart';
 import 'package:commuication/models/extn/date_time_extention.dart';
@@ -41,7 +40,6 @@ class _MessagePageState extends State<MessagePage> {
     final message =
         Message(text: _messageController.text.trim(), user: currentUser);
     provider.addMessage(message);
-    Log.i("Message added");
     _messageController.clear();
   }
 
@@ -107,7 +105,7 @@ class _MessagePageState extends State<MessagePage> {
                           Expanded(
                             child: Container(
                               decoration: BoxDecoration(
-                                color: AppColors.lightBackground,
+                                color: AppColors.white.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               margin:

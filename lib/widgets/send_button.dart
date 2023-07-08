@@ -24,8 +24,8 @@ class _SendButtonState extends State<SendButton> {
       onHover: (val) {},
       style: ElevatedButton.styleFrom(
         enableFeedback: true,
-        backgroundColor: AppColors.sendButtonColor,
-        disabledBackgroundColor: AppColors.sendButtonColor.withOpacity(0.5),
+        backgroundColor: AppColors.successColor,
+        disabledBackgroundColor: AppColors.successColor.withOpacity(0.5),
         disabledForegroundColor: AppColors.white.withOpacity(1),
         padding: const EdgeInsets.symmetric(
           horizontal: 10,

@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
         title: 'Communication',
         theme: ThemeData(
           fontFamily: Fonts.regular,
-          primarySwatch: Colors.blue,
           textTheme: Themes.textTheme,
         ),
         home: const AppRouter(),

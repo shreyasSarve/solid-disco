@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class AppScaffold extends Scaffold {
   const AppScaffold({
     super.body,
-    super.backgroundColor = AppColors.backgroundColor,
+    super.backgroundColor = AppColors.primaryColor,
     super.key,
   });
 }
@@ -14,7 +14,7 @@ class DummyScaffold extends Container {
     super.key,
     AppBar? appBar,
     Widget? body,
-    Color backgroundColor = AppColors.backgroundColor,
+    Color backgroundColor = AppColors.primaryColor,
   }) : super(
           child: Column(
             children: [

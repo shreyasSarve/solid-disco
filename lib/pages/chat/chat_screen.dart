@@ -7,7 +7,7 @@ import 'package:commuication/pages/message/message_page.dart';
 import 'package:commuication/pages/page.dart';
 import 'package:commuication/providers/chat/chat_screen_provider.dart';
 import 'package:commuication/static/app_colors.dart';
-import 'package:commuication/static/text_theme.dart';
+import 'package:commuication/widgets/navbar/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
