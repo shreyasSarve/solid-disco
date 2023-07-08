@@ -12,16 +12,12 @@ class ChatScreenDesktopView extends StatelessWidget {
       body: Row(
         children: [
           Container(
-            padding: const EdgeInsetsDirectional.symmetric(
-              vertical: 10,
-              // horizontal: 10,
-            ),
             decoration: const BoxDecoration(
               color: AppColors.backgroundColor,
               border: Border(
                 right: BorderSide(
-                  width: 0.05,
-                  color: AppColors.white,
+                  width: 2,
+                  color: AppColors.black,
                 ),
               ),
             ),

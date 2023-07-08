@@ -1,3 +1,4 @@
+import 'package:commuication/static/app_colors.dart';
 import 'package:commuication/widgets/navbar/navbar_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,54 +13,57 @@ class SideNavbar extends StatelessWidget {
   final List<NavbarItem> items;
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        final provider = _NavbarProvider(
-          intialActiveIndex: 0,
-          onChanged: onChanged,
-        );
-
-        Widget buildItem(int index, int activeIndex) {
-          return Column(
-            children: [
-              NavBarIcon(
-                isActive: index == activeIndex,
-                item: items[index],
-                onPressed: (item) {
-                  provider.changeActiveIndex(
-                    index,
-                  );
-                },
-                isHover: provider.hoverIndex == index,
-                onHover: (val, item) {
-                  if (val) {
-                    provider.chnageHoverIndex(index);
-                  } else {
-                    provider.changeActiveIndex(provider.activeIndex);
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              )
-            ],
+    return Container(
+      color: AppColors.backgroundColor,
+      child: Builder(
+        builder: (context) {
+          final provider = _NavbarProvider(
+            intialActiveIndex: 0,
+            onChanged: onChanged,
           );
-        }
 
-        return ChangeNotifierProvider.value(
-          value: provider,
-          child: Consumer<_NavbarProvider>(
-            builder: (context, value, child) {
-              return Column(
-                children: [
-                  for (int index = 0; index < items.length; index++)
-                    buildItem(index, provider.activeIndex)
-                ],
-              );
-            },
-          ),
-        );
-      },
+          Widget buildItem(int index, int activeIndex) {
+            return Column(
+              children: [
+                NavBarIcon(
+                  isActive: index == activeIndex,
+                  item: items[index],
+                  onPressed: (item) {
+                    provider.changeActiveIndex(
+                      index,
+                    );
+                  },
+                  isHover: provider.hoverIndex == index,
+                  onHover: (val, item) {
+                    if (val) {
+                      provider.chnageHoverIndex(index);
+                    } else {
+                      provider.changeActiveIndex(provider.activeIndex);
+                    }
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                )
+              ],
+            );
+          }
+
+          return ChangeNotifierProvider.value(
+            value: provider,
+            child: Consumer<_NavbarProvider>(
+              builder: (context, value, child) {
+                return Column(
+                  children: [
+                    for (int index = 0; index < items.length; index++)
+                      buildItem(index, provider.activeIndex)
+                  ],
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }

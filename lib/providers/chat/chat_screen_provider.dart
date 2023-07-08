@@ -20,7 +20,9 @@ class ChatScreenProvider extends ChangeNotifier {
   }
 
   void changeMessageScreen(MessageScreenArgs args) {
+    _chatRoomScreenProvider.changeActiveChatRoom(args.room.id);
     _messagePageProvider.changeChatRoom(args);
+    notifyListeners();
   }
 
   void changeToMessageScreen() {

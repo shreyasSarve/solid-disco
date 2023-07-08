@@ -56,7 +56,7 @@ class _ChatRoomsScreenState extends State<ChatRoomsScreen> {
                     );
                   }
                   return RoomCategory(
-                    roomCategory: categories[index % 2],
+                    roomCategory: categories[index - 1],
                   );
                 },
                 itemCount: categories.length + 1,

@@ -15,26 +15,35 @@ class _RoomCategoryState extends State<RoomCategory> {
         color: Colors.white,
         letterSpacing: 1,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(
-              horizontal: 50,
-            ),
-            child: Text(
-              widget.roomCategory.name,
-              style: AppTextTheme.regular.copyWith(
-                color: Colors.grey,
-                fontSize: 12,
+      child: Consumer<ChatRoomScreenProvider>(
+        builder: (context, value, child) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 10,
               ),
-            ),
-          ),
-          for (final room in widget.roomCategory.rooms) Room(chatRoom: room)
-        ],
+              Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 50,
+                  vertical: 10,
+                ),
+                child: Text(
+                  widget.roomCategory.name,
+                  style: AppTextTheme.regular.copyWith(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              for (final room in widget.roomCategory.rooms)
+                Room(
+                  chatRoom: room,
+                  isActiveChatRoom: value.activeRoomId == room.id,
+                )
+            ],
+          );
+        },
       ),
     );
   }

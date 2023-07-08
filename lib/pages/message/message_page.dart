@@ -3,7 +3,6 @@
 library message_page;
 
 import 'package:commuication/main.dart';
-import 'package:commuication/models/conf/message_args.dart';
 import 'package:commuication/models/extn/date_time_extention.dart';
 import 'package:commuication/models/message.dart';
 import 'package:commuication/models/screen_type.dart';
@@ -33,8 +32,7 @@ class _MessagePageState extends State<MessagePage> {
   bool canSend = false;
   User currentUser = User.phone;
   final FocusNode _focusNode = FocusNode();
-  late final MessageScreenArgs args;
-  late final MessagePageProvider provider;
+  late MessagePageProvider provider;
 
   void _addMessage() {
     final message =
@@ -44,47 +42,47 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    provider = Provider.of<MessagePageProvider>(context, listen: false);
-    args = provider.args;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Consumer<MessagePageProvider>(
-      builder: (context, value, child) {
-        final args = value.args;
-        return Column(
-          children: [
-            AppBar(
-              leading: widget.screenType != ScreenType.desktop
-                  ? BackButton(
-                      onPressed: () {
-                        final router = Provider.of<ChatScreenProvider>(context,
-                            listen: false);
-                        router.back();
-                      },
-                    )
-                  : null,
-              title: Text(args.roomName),
-              backgroundColor: AppColors.backgroundColor,
-              elevation: 0.5,
-              shadowColor: Colors.white,
-            ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(
-                  bottom: 15,
-                  left: 10,
-                  right: 10,
-                  top: 1,
+    return Container(
+      color: AppColors.ternaryColor,
+      child: Consumer<MessagePageProvider>(
+        builder: (context, value, child) {
+          final args = value.args;
+          provider = Provider.of<MessagePageProvider>(context, listen: false);
+          return Column(
+            children: [
+              AppBar(
+                leading: widget.screenType != ScreenType.desktop
+                    ? BackButton(
+                        onPressed: () {
+                          final router = Provider.of<ChatScreenProvider>(
+                              context,
+                              listen: false);
+                          router.back();
+                        },
+                      )
+                    : null,
+                title: Text(args.room.name),
+                backgroundColor: AppColors.ternaryColor,
+                elevation: 0,
+                shape: const Border(
+                  bottom: BorderSide(
+                    color: AppColors.white,
+                    width: 0.05,
+                  ),
                 ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        color: AppColors.backgroundColor,
+              ),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(
+                    bottom: 15,
+                    left: 10,
+                    right: 10,
+                    top: 1,
+                  ),
+                  child: Column(
+                    children: [
+                      Expanded(
                         child: ListView.separated(
                           padding: const EdgeInsets.only(top: 10, bottom: 20),
                           separatorBuilder: (context, index) => const SizedBox(
@@ -97,65 +95,65 @@ class _MessagePageState extends State<MessagePage> {
                           scrollDirection: Axis.vertical,
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.white.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 0),
-                              child: TextFormField(
-                                focusNode: _focusNode,
-                                onFieldSubmitted: (value) {
-                                  _sendMessage();
-                                },
-                                controller: _messageController,
-                                cursorColor: Colors.white,
-                                decoration: InputDecoration(
-                                  suffixIconColor: AppColors.white,
-                                  suffixIcon: InkWell(
-                                    onTap: () {
-                                      //todo: attach file...
-                                    },
-                                    child: const Icon(
-                                      Icons.attach_file_rounded,
-                                      size: 20,
-                                      color: AppColors.white,
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.white.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 0),
+                                child: TextFormField(
+                                  focusNode: _focusNode,
+                                  onFieldSubmitted: (value) {
+                                    _sendMessage();
+                                  },
+                                  controller: _messageController,
+                                  cursorColor: Colors.white,
+                                  decoration: InputDecoration(
+                                    suffixIconColor: AppColors.white,
+                                    suffixIcon: InkWell(
+                                      onTap: () {
+                                        //todo: attach file...
+                                      },
+                                      child: const Icon(
+                                        Icons.attach_file_rounded,
+                                        size: 20,
+                                        color: AppColors.white,
+                                      ),
                                     ),
-                                  ),
-                                  border: InputBorder.none,
-                                  hintText: "Write text",
-                                  hintStyle: TextStyle(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    fontFamily: Fonts.regular,
-                                    letterSpacing: 0.5,
+                                    border: InputBorder.none,
+                                    hintText: "Write text",
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      fontFamily: Fonts.regular,
+                                      letterSpacing: 0.5,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          SendButton(
-                            onPressed: _sendMessage,
-                            disable: canSend,
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+                            SendButton(
+                              onPressed: _sendMessage,
+                              disable: canSend,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        );
-      },
+            ],
+          );
+        },
+      ),
     );
   }
 

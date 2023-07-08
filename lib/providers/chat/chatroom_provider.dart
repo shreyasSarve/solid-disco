@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 class ChatRoomScreenProvider extends ChangeNotifier {
   final List<ChatRoomCategory> _categories = [];
-
+  String _activeChatRoomId = "";
   ChatRoomScreenProvider() {
     favouriteRoom.addChatRoom(chatRoom1);
     favouriteRoom.addChatRoom(chatRoom2);
@@ -15,12 +15,16 @@ class ChatRoomScreenProvider extends ChangeNotifier {
     personalRoom.addChatRoom(chatRoom2);
     personalRoom.addChatRoom(chatRoom3);
     personalRoom.addChatRoom(chatRoom4);
-
     _categories.add(favouriteRoom);
-    _categories.add(personalRoom);
+  }
+
+  void changeActiveChatRoom(String roomId) {
+    _activeChatRoomId = roomId;
+    notifyListeners();
   }
 
   List<ChatRoomCategory> get categories => _categories;
+  String get activeRoomId => _activeChatRoomId;
 }
 
 final ChatRoom chatRoom1 = ChatRoom(name: "Personal", id: "#12345");
