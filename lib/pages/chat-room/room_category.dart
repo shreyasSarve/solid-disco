@@ -18,8 +18,10 @@ class _RoomCategoryState extends State<RoomCategory> {
         color: Colors.white,
         letterSpacing: 1,
       ),
-      child: Consumer<ChatRoomScreenProvider>(
+      child: Selector<ChatRoomScreenProvider, String>(
+        selector: (p0, p1) => p1.activeRoomId,
         builder: (context, value, child) {
+          inspect(value);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -42,7 +44,7 @@ class _RoomCategoryState extends State<RoomCategory> {
               for (final room in widget.roomCategory)
                 Room(
                   chatRoom: room,
-                  isActiveChatRoom: value.activeRoomId == room.id,
+                  isActiveChatRoom: value == room.id,
                 )
             ],
           );

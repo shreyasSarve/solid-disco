@@ -21,6 +21,9 @@ class MessageService {
   Future<void> clearBox() async {
     try {
       await _hiveBox!.clear();
+      _hiveBox!.add(0);
+      _messagesSize = 0;
+      _lastPage = 0;
     } catch (e) {}
   }
 

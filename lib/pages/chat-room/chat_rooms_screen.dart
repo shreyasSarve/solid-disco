@@ -2,6 +2,8 @@
 
 library chat_rooms;
 
+import 'dart:developer';
+
 import 'package:commuication/models/args/message_args.dart';
 import 'package:commuication/models/chat_room.dart';
 import 'package:commuication/providers/chat/chat_screen_provider.dart';
@@ -24,65 +26,67 @@ class ChatRoomsScreen extends StatefulWidget {
 }
 
 class _ChatRoomsScreenState extends State<ChatRoomsScreen> {
+  late final ChatRoomScreenProvider provider;
+  @override
+  void initState() {
+    super.initState();
+    provider = Provider.of<ChatScreenProvider>(context, listen: false)
+        .chatRoomsScreenProvider;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: () {
-        return Provider.of<ChatRoomScreenProvider>(context, listen: false);
-      }(),
-      child: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            right: BorderSide(
-              width: 0.05,
-              color: AppColors.white,
-            ),
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          right: BorderSide(
+            width: 0.05,
+            color: AppColors.white,
           ),
         ),
-        child: Consumer<ChatRoomScreenProvider>(
-          // selector: (_, provider) => provider.categories,
-          builder: (context, provider, child) {
-            final categories = provider.categories;
-            return LayoutBuilder(
-              builder: (context, constraints) => ListView.separated(
-                separatorBuilder: (_, __) => const SizedBox(
-                  height: 5,
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) => ListView.separated(
+          separatorBuilder: (_, __) => const SizedBox(
+            height: 5,
+          ),
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return AppBar(
+                actions: [
+                  IconButton(
+                    onPressed: () {},
+                    splashRadius: 20,
+                    splashColor: AppColors.accentColor,
+                    icon: const Icon(
+                      Icons.add_circle,
+                      color: AppColors.successColor,
+                    ),
+                  )
+                ],
+                title: const Text(
+                  "Chat Rooms",
                 ),
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return AppBar(
-                      actions: [
-                        IconButton(
-                          onPressed: () {},
-                          splashRadius: 20,
-                          splashColor: AppColors.accentColor,
-                          icon: const Icon(
-                            Icons.add_circle,
-                            color: AppColors.successColor,
-                          ),
-                        )
-                      ],
-                      title: const Text(
-                        "Chat Rooms",
-                      ),
-                      backgroundColor: AppColors.backgroundColor,
-                      elevation: 0,
-                      shadowColor: AppColors.white,
-                    );
-                  }
-                  if (index == 1) {
-                    return const _ChatRoomSearchField(
-                      key: ValueKey("__ChatRoomSearchField__"),
-                    );
-                  }
-                  return RoomCategory(
-                    roomCategory: categories,
-                  );
-                },
-                itemCount: 3,
-              ),
+                backgroundColor: AppColors.backgroundColor,
+                elevation: 0,
+                shadowColor: AppColors.white,
+              );
+            }
+            if (index == 1) {
+              return const _ChatRoomSearchField(
+                key: ValueKey("__ChatRoomSearchField__"),
+              );
+            }
+            return StreamBuilder(
+              stream: provider.stream,
+              builder: (context, snapshot) {
+                return RoomCategory(
+                  roomCategory: snapshot.data ?? [],
+                );
+              },
             );
           },
+          itemCount: 3,
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'package:commuication/models/user.dart';
+
 class Message {
   final String text;
   late final DateTime dateTime;
@@ -35,7 +37,3 @@ class Message {
     }
   }
 }
-
-enum User { phone, laptop }
-
-extension UserExtention on User {}

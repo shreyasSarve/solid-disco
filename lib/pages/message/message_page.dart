@@ -2,13 +2,16 @@
 
 library message_page;
 
-import 'package:commuication/main.dart';
+import 'dart:developer';
+
 import 'package:commuication/models/chat_room.dart';
 import 'package:commuication/models/extn/date_time_extention.dart';
 import 'package:commuication/models/message.dart';
 import 'package:commuication/models/screen_type.dart';
+import 'package:commuication/models/user.dart';
 import 'package:commuication/providers/chat/chat_screen_provider.dart';
 import 'package:commuication/providers/chat/message_screen_provider.dart';
+import 'package:commuication/providers/user_provider.dart';
 import 'package:commuication/static/app_colors.dart';
 import 'package:commuication/static/fonts.dart';
 import 'package:commuication/static/text_theme.dart';
@@ -32,13 +35,14 @@ class _MessagePageState extends State<MessagePage> {
   final _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool canSend = false;
-  User currentUser = User.phone;
+  User currentUser = UserProvider.thisMachineUser();
   final FocusNode _focusNode = FocusNode();
   late MessagePageProvider provider;
 
   void _addMessage() {
     final message =
         Message(text: _messageController.text.trim(), user: currentUser);
+    log("$currentUser");
     provider.addMessage(message);
     _messageController.clear();
   }

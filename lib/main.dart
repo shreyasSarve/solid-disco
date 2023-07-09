@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:commuication/models/message.dart';
+import 'package:commuication/models/user.dart';
 import 'package:commuication/router/app_router.dart';
 import 'package:commuication/router/app_routes.dart';
 import 'package:commuication/router/app_routes_manager.dart';
@@ -15,16 +15,29 @@ void main() async {
   runApp(const MyApp());
 }
 
-const thisMachineUser = User.phone;
-bool isCurrentUser(User user) {
-  return user == thisMachineUser;
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class _MyAppState extends State<MyApp> {
   AppRoutes getInitialRoute() {
     if (Platform.isAndroid) return AppRoutes.Chat_Room_Mobile;
     return AppRoutes.Message_Desktop;
+  }
+
+  User getUser() {
+    if (Platform.isAndroid) {
+      return User.phone;
+    }
+    return User.laptop;
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -33,7 +46,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => AppRoutesManager(getInitialRoute()),
-        )
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

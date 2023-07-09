@@ -7,16 +7,15 @@ class _MessageWidget extends StatelessWidget {
   final Message message;
   @override
   Widget build(BuildContext context) {
-    final bgColor = isCurrentUser(message.user)
+    final bool isCurrentUser = UserProvider.isCurrentUser(message.user);
+    final bgColor = isCurrentUser
         ? AppColors.lightBackground
         : Colors.green.shade500.withOpacity(0.1);
-    final textColor =
-        !isCurrentUser(message.user) ? AppColors.white : Colors.green.shade500;
-    final crossAlignment = !isCurrentUser(message.user)
-        ? CrossAxisAlignment.start
-        : CrossAxisAlignment.end;
+    final textColor = !isCurrentUser ? AppColors.white : Colors.green.shade500;
+    final crossAlignment =
+        !isCurrentUser ? CrossAxisAlignment.start : CrossAxisAlignment.end;
     const double margin = 100;
-    final oppositeMargin = !isCurrentUser(message.user)
+    final oppositeMargin = !isCurrentUser
         ? const EdgeInsets.only(right: margin)
         : const EdgeInsets.only(left: margin);
     return Container(
@@ -68,9 +67,10 @@ class _MessageWidget extends StatelessWidget {
   }
 
   Widget laptopUser() {
-    final alignment = !isCurrentUser(message.user)
-        ? MainAxisAlignment.start
-        : MainAxisAlignment.end;
+    final bool isCurrentUser = UserProvider.isCurrentUser(message.user);
+
+    final alignment =
+        !isCurrentUser ? MainAxisAlignment.start : MainAxisAlignment.end;
     return DefaultTextStyle(
       style: AppTextTheme.regular,
       child: Row(
@@ -99,9 +99,10 @@ class _MessageWidget extends StatelessWidget {
   }
 
   Widget phoneUser() {
-    final alignment = !isCurrentUser(message.user)
-        ? MainAxisAlignment.start
-        : MainAxisAlignment.end;
+    final bool isCurrentUser = UserProvider.isCurrentUser(message.user);
+
+    final alignment =
+        !isCurrentUser ? MainAxisAlignment.start : MainAxisAlignment.end;
     return Row(
       mainAxisAlignment: alignment,
       children: [
