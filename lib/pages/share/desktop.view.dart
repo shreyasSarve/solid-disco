@@ -1,10 +1,10 @@
-part of chat_screen;
+part of share_screen;
 // ignore_for_file: constant_identifier_names
 
-class ChatScreenDesktopView extends StatelessWidget {
-  static const String KEY = "__ChatScreenDesktopView__";
+class ShareScreenDesktopView extends StatelessWidget {
+  static const String KEY = "__ShareScreenDesktopView__";
 
-  const ChatScreenDesktopView({super.key});
+  const ShareScreenDesktopView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +23,12 @@ class ChatScreenDesktopView extends StatelessWidget {
             ),
             child: const AppSideNavbar(
               key: ValueKey(AppSideNavbar.KEY),
+              initialIndex: 1,
             ),
           ),
           const Expanded(
-            flex: 2,
-            child: ChatRoomsScreen(
-              key: ValueKey(ChatRoomsScreen.KEY),
-            ),
-          ),
-          const Expanded(
-            flex: 5,
-            child: MessagePage(
-              screenType: ScreenType.desktop,
-              key: ValueKey(MessagePage.KEY),
-            ),
-          ),
+            child: SharePage(),
+          )
         ],
       ),
     );

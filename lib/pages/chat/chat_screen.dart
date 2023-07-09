@@ -7,7 +7,7 @@ import 'package:commuication/pages/message/message_page.dart';
 import 'package:commuication/pages/page.dart';
 import 'package:commuication/providers/chat/chat_screen_provider.dart';
 import 'package:commuication/static/app_colors.dart';
-import 'package:commuication/widgets/navbar/navbar.dart';
+import 'package:commuication/widgets/app_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +25,8 @@ class ChatScreen extends StatelessWidget {
         providers: [
           ChangeNotifierProvider.value(value: _provider.messageScreenProvider),
           ChangeNotifierProvider.value(
-              value: _provider.chatRoomsScreenProvider),
+            value: _provider.chatRoomsScreenProvider,
+          ),
         ],
         child: LayoutBuilder(
           builder: (context, constraints) {

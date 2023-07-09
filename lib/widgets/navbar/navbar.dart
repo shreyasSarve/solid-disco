@@ -3,31 +3,44 @@ import 'package:commuication/widgets/navbar/navbar_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SideNavbar extends StatelessWidget {
+class SideNavbar extends StatefulWidget {
   const SideNavbar({
     super.key,
     required this.onChanged,
     required this.items,
+    required this.activeIndex,
   });
+  final int activeIndex;
   final Function(int index) onChanged;
   final List<NavbarItem> items;
+
+  @override
+  State<SideNavbar> createState() => _SideNavbarState();
+}
+
+class _SideNavbarState extends State<SideNavbar> {
+  late final _NavbarProvider provider;
+  @override
+  void initState() {
+    super.initState();
+    provider = _NavbarProvider(
+      intialActiveIndex: widget.activeIndex,
+      onChanged: widget.onChanged,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.backgroundColor,
       child: Builder(
         builder: (context) {
-          final provider = _NavbarProvider(
-            intialActiveIndex: 0,
-            onChanged: onChanged,
-          );
-
           Widget buildItem(int index, int activeIndex) {
             return Column(
               children: [
                 NavBarIcon(
                   isActive: index == activeIndex,
-                  item: items[index],
+                  item: widget.items[index],
                   onPressed: (item) {
                     provider.changeActiveIndex(
                       index,
@@ -55,7 +68,7 @@ class SideNavbar extends StatelessWidget {
               builder: (context, value, child) {
                 return Column(
                   children: [
-                    for (int index = 0; index < items.length; index++)
+                    for (int index = 0; index < widget.items.length; index++)
                       buildItem(index, provider.activeIndex)
                   ],
                 );

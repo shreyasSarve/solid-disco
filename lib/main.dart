@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:commuication/models/user.dart';
+import 'package:commuication/providers/view_provider.dart';
 import 'package:commuication/router/app_router.dart';
 import 'package:commuication/router/app_routes.dart';
 import 'package:commuication/router/app_routes_manager.dart';
@@ -47,6 +48,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (context) => AppRoutesManager(getInitialRoute()),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ViewProvider(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
