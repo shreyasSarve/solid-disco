@@ -2,9 +2,8 @@
 
 library chat_rooms;
 
+import 'package:commuication/models/args/message_args.dart';
 import 'package:commuication/models/chat_room.dart';
-import 'package:commuication/models/chat_room_category.dart';
-import 'package:commuication/models/conf/message_args.dart';
 import 'package:commuication/providers/chat/chat_screen_provider.dart';
 import 'package:commuication/providers/chat/chatroom_provider.dart';
 import 'package:commuication/static/app_colors.dart';
@@ -27,18 +26,23 @@ class ChatRoomsScreen extends StatefulWidget {
 class _ChatRoomsScreenState extends State<ChatRoomsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          right: BorderSide(
-            width: 0.05,
-            color: AppColors.white,
+    return ChangeNotifierProvider.value(
+      value: () {
+        return Provider.of<ChatRoomScreenProvider>(context, listen: false);
+      }(),
+      child: Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            right: BorderSide(
+              width: 0.05,
+              color: AppColors.white,
+            ),
           ),
         ),
-      ),
-      child: Selector<ChatRoomScreenProvider, List<ChatRoomCategory>>(
-          selector: (_, provider) => provider.categories,
-          builder: (context, categories, child) {
+        child: Consumer<ChatRoomScreenProvider>(
+          // selector: (_, provider) => provider.categories,
+          builder: (context, provider, child) {
+            final categories = provider.categories;
             return LayoutBuilder(
               builder: (context, constraints) => ListView.separated(
                 separatorBuilder: (_, __) => const SizedBox(
@@ -47,6 +51,17 @@ class _ChatRoomsScreenState extends State<ChatRoomsScreen> {
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     return AppBar(
+                      actions: [
+                        IconButton(
+                          onPressed: () {},
+                          splashRadius: 20,
+                          splashColor: AppColors.accentColor,
+                          icon: const Icon(
+                            Icons.add_circle,
+                            color: AppColors.successColor,
+                          ),
+                        )
+                      ],
                       title: const Text(
                         "Chat Rooms",
                       ),
@@ -55,14 +70,86 @@ class _ChatRoomsScreenState extends State<ChatRoomsScreen> {
                       shadowColor: AppColors.white,
                     );
                   }
+                  if (index == 1) {
+                    return const _ChatRoomSearchField(
+                      key: ValueKey("__ChatRoomSearchField__"),
+                    );
+                  }
                   return RoomCategory(
-                    roomCategory: categories[index - 1],
+                    roomCategory: categories,
                   );
                 },
-                itemCount: categories.length + 1,
+                itemCount: 3,
               ),
             );
-          }),
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _ChatRoomSearchField extends StatefulWidget {
+  const _ChatRoomSearchField({
+    super.key,
+  });
+
+  @override
+  State<_ChatRoomSearchField> createState() => _ChatRoomSearchFieldState();
+}
+
+class _ChatRoomSearchFieldState extends State<_ChatRoomSearchField> {
+  final controller = TextEditingController();
+  late final ChatRoomScreenProvider provider;
+  @override
+  void initState() {
+    super.initState();
+    provider = Provider.of<ChatRoomScreenProvider>(context, listen: false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: AppColors.accentColor,
+              border: Border.all(
+                color: AppColors.black,
+                width: 0.01,
+              ),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: TextFormField(
+              controller: controller,
+              cursorColor: AppColors.white,
+              cursorRadius: const Radius.circular(5),
+              cursorHeight: 20,
+              onFieldSubmitted: (value) {
+                if (value.trim().isEmpty) return;
+                provider.addNewChatRoom(value);
+                controller.clear();
+              },
+              decoration: const InputDecoration(
+                hintText: "Search room",
+                hintStyle: AppTextTheme.light,
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: AppColors.white,
+                ),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          const Text(
+            "Enter to create chat room",
+            style: AppTextTheme.light,
+          )
+        ],
+      ),
     );
   }
 }

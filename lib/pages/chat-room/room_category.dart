@@ -1,8 +1,11 @@
 part of chat_rooms;
 
 class RoomCategory extends StatefulWidget {
-  const RoomCategory({super.key, required this.roomCategory});
-  final ChatRoomCategory roomCategory;
+  const RoomCategory({
+    super.key,
+    required this.roomCategory,
+  });
+  final List<ChatRoom> roomCategory;
   @override
   State<RoomCategory> createState() => _RoomCategoryState();
 }
@@ -23,20 +26,20 @@ class _RoomCategoryState extends State<RoomCategory> {
               const SizedBox(
                 height: 10,
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 50,
-                  vertical: 10,
-                ),
-                child: Text(
-                  widget.roomCategory.name,
-                  style: AppTextTheme.regular.copyWith(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-              for (final room in widget.roomCategory.rooms)
+              // Container(
+              //   margin: const EdgeInsets.symmetric(
+              //     horizontal: 50,
+              //     vertical: 10,
+              //   ),
+              //   child: Text(
+              //     "FAVOURITES",
+              //     style: AppTextTheme.regular.copyWith(
+              //       color: Colors.grey,
+              //       fontSize: 12,
+              //     ),
+              //   ),
+              // ),
+              for (final room in widget.roomCategory)
                 Room(
                   chatRoom: room,
                   isActiveChatRoom: value.activeRoomId == room.id,

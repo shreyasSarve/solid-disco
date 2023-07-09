@@ -1,4 +1,4 @@
-import 'package:commuication/models/conf/message_args.dart';
+import 'package:commuication/models/args/message_args.dart';
 import 'package:commuication/providers/chat/chatroom_provider.dart';
 import 'package:commuication/providers/chat/message_screen_provider.dart';
 import 'package:flutter/widgets.dart';

@@ -69,36 +69,129 @@ class _RoomState extends State<Room> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  backgroundColor: AppColors.errorColor.withOpacity(0.1),
-                  radius: 15,
-                  child: Text(
-                    widget.chatRoom.name[0],
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.clip,
-                    style: AppTextTheme.bold.copyWith(
-                      color: Colors.red,
-                      fontSize: 25,
+                Expanded(
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: AppColors.errorColor.withOpacity(0.1),
+                        radius: 15,
+                        child: Text(
+                          widget.chatRoom.name[0],
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.clip,
+                          style: AppTextTheme.bold.copyWith(
+                            color: Colors.red,
+                            fontSize: 25,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(
+                        child: Text(
+                          widget.chatRoom.name,
+                          overflow: TextOverflow.visible,
+                          maxLines: 1,
+                          style: AppTextTheme.regular.copyWith(
+                            color: textColor,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (isHoverd || widget.isActiveChatRoom)
+                  InkWell(
+                    borderRadius: BorderRadius.circular(20),
+                    splashColor: AppColors.accentColor,
+                    onTap: () {
+                      //todo: delete chat room
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      alignment: Alignment.centerRight,
+                      child: Icon(
+                        Icons.delete_rounded,
+                        color: widget.isActiveChatRoom
+                            ? AppColors.backgroundColor
+                            : AppColors.white,
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  widget.chatRoom.name,
-                  overflow: TextOverflow.fade,
-                  style: AppTextTheme.regular.copyWith(
-                    color: textColor,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
-                  ),
-                ),
+                  )
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class HoverIcon extends StatefulWidget {
+  const HoverIcon({
+    super.key,
+    required this.bgColor,
+    required this.hoverBgColor,
+    required this.icon,
+    required this.onPressed,
+    this.hoverIconColor,
+    this.hoverIcon,
+    // this.onPressedIcon,
+  });
+  final Color hoverBgColor;
+  final Color bgColor;
+  final Icon icon;
+  final Icon? hoverIcon;
+  final Color? hoverIconColor;
+
+  // final Icon? onPressedIcon;
+  final VoidCallback onPressed;
+  @override
+  State<HoverIcon> createState() => _HoverIconState();
+}
+
+class _HoverIconState extends State<HoverIcon> {
+  bool isHover = false;
+  late Color bgColor;
+  late Icon icon;
+  @override
+  void initState() {
+    super.initState();
+    initialState();
+  }
+
+  void onHover() {
+    icon = widget.hoverIcon ?? widget.icon;
+    icon = Icon(
+      icon.icon,
+      color: widget.hoverIconColor,
+    );
+    bgColor = widget.hoverBgColor;
+  }
+
+  void initialState() {
+    bgColor = widget.bgColor;
+    icon = widget.icon;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      splashColor: bgColor,
+      radius: (icon.size ?? 20) / 2,
+      onHover: (val) {
+        if (val) {
+          onHover();
+          setState(() {});
+        } else {
+          initState();
+          setState(() {});
+        }
+      },
+      child: icon,
     );
   }
 }

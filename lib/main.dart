@@ -7,9 +7,11 @@ import 'package:commuication/router/app_routes_manager.dart';
 import 'package:commuication/static/fonts.dart';
 import 'package:commuication/static/themes.dart';
 import 'package:flutter/material.dart' hide TextTheme;
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  await Hive.initFlutter();
   runApp(const MyApp());
 }
 

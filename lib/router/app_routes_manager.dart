@@ -1,5 +1,5 @@
-import 'package:commuication/models/conf/args.dart';
-import 'package:commuication/models/conf/no_args.dart';
+import 'package:commuication/models/args/args.dart';
+import 'package:commuication/models/args/no_args.dart';
 import 'package:commuication/router/app_routes.dart';
 import 'package:flutter/material.dart' hide Route;
 
