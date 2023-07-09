@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:commuication/models/chat_room.dart';
 import 'package:hive/hive.dart';
 
@@ -25,11 +23,18 @@ class ChatRoomsService {
   Future<List<ChatRoom>> getAllChatRooms() async {
     try {
       final allRooms = _chatRoomBox.values.toList();
-      inspect(allRooms);
       return allRooms.map((json) => ChatRoom.fromJson(json)).toList();
     } catch (e) {
-      log("Error", error: e);
       return [];
+    }
+  }
+
+  Future<bool> deleteRoom(String id) async {
+    try {
+      await _chatRoomBox.delete(id);
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

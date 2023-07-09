@@ -108,7 +108,8 @@ class _RoomState extends State<Room> {
                     borderRadius: BorderRadius.circular(20),
                     splashColor: AppColors.accentColor,
                     onTap: () {
-                      //todo: delete chat room
+                      Provider.of<ChatScreenProvider>(context, listen: false)
+                          .deleteRoom(widget.chatRoom.id);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(5),

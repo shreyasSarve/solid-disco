@@ -1,16 +1,17 @@
 import 'dart:developer';
 
-import 'package:commuication/models/conf/room_config.dart';
 import 'package:commuication/models/message.dart';
 import 'package:hive/hive.dart';
 
 class MessageService {
-  late Box _hiveBox;
+  Box? _hiveBox;
   int _lastPage = 0;
-  bool isBoxInitialized = false;
+  int _messagesSize = 0;
+
   Future<void> init(String messageId) async {
     _hiveBox = await Hive.openBox(messageId);
-    _lastPage = 0;
+    await getConfig();
+    _lastPage = _messagesSize;
   }
 
   // Future<List<Message>> getMessages(int page) async{
@@ -18,44 +19,57 @@ class MessageService {
 
   // }
   Future<void> clearBox() async {
-    await _hiveBox.clear();
+    try {
+      await _hiveBox!.clear();
+    } catch (e) {}
   }
 
-  Future<RoomConfig?> getConfig() async {
+  Future<void> getConfig() async {
     try {
-      final config = await _hiveBox.get(RoomConfig.key);
-      if (config != null) {
-        return RoomConfig.fromJson(config);
+      final config = await _hiveBox!.getAt(0);
+      if (config == null) {
+        _messagesSize = 0;
+        return;
       }
-      return null;
+      _messagesSize = config;
     } catch (e) {
       log("config for room not found", error: e);
-      return null;
+      _addConfig();
+      _messagesSize = 0;
     }
   }
 
-  Future<bool> addRoomConfig(RoomConfig config) async {
+  Future<void> _addConfig() async {
     try {
-      await _hiveBox.add(config.toJson());
-      return true;
+      await _hiveBox!.add(0);
+    } catch (e) {}
+  }
+
+  Future<void> _updateMessageSize() async {
+    try {
+      _messagesSize++;
+      await _hiveBox!.putAt(0, _messagesSize);
     } catch (e) {
-      log("Error while adding config for room",
-          error: e, name: "[ $runtimeType -> addRoomConfig ]");
-      return false;
+      log(
+        "Error while adding config for room",
+        error: e,
+        name: "[ $runtimeType -> addRoomConfig ]",
+      );
     }
   }
 
   Future<List<Message>> getMessages({int pageSize = 10}) async {
     try {
+      log("getting messages for ${_hiveBox!.name}");
       final List<Message> messages = [];
       int index = 0;
-      for (; index < pageSize; index++) {
+      for (; index < pageSize && _lastPage > 0; index++) {
         final message = await getAtIndex(_lastPage);
         if (message == null) break;
-        _lastPage++;
+        _lastPage--;
         messages.add(message);
       }
-      return messages;
+      return messages.reversed.toList();
     } catch (e) {
       return [];
     }
@@ -63,7 +77,7 @@ class MessageService {
 
   Future<Message?> getAtIndex(int index) async {
     try {
-      final res = await _hiveBox.getAt(index);
+      final res = await _hiveBox!.getAt(index);
       return Message.fromJson(res);
     } catch (e) {
       log(
@@ -77,11 +91,20 @@ class MessageService {
 
   Future<bool> saveMessage(Message message) async {
     try {
-      _hiveBox.add(message.toJson());
-      _lastPage++;
+      _hiveBox!.add(message.toJson());
+      _updateMessageSize();
       return true;
     } catch (e) {
       log("Error while saving message", error: e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteBox({String? id}) async {
+    try {
+      await Hive.deleteBoxFromDisk(id ?? _hiveBox!.name);
+      return true;
+    } catch (e) {
       return false;
     }
   }

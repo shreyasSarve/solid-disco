@@ -8,7 +8,7 @@ class Message {
     required this.user,
   }) : dateTime = dateTime ?? DateTime.now();
 
-  factory Message.fromJson(Map<String, dynamic> json) {
+  factory Message.fromJson(Map<dynamic, dynamic> json) {
     return Message(
       text: json['text'],
       user: _fromString(json['user']),

@@ -29,6 +29,12 @@ class ChatScreenProvider extends ChangeNotifier {
     changeChatScreen(ChatScreens.message);
   }
 
+  void deleteRoom(String id) async {
+    if (await _messagePageProvider.deleteRoom(id: id)) {
+      _chatRoomScreenProvider.deleteChatRoom(id);
+    }
+  }
+
   ChatScreens get currentScreen => _chatScreen;
   MessagePageProvider get messageScreenProvider => _messagePageProvider;
   ChatRoomScreenProvider get chatRoomsScreenProvider => _chatRoomScreenProvider;

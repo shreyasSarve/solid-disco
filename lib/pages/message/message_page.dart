@@ -30,6 +30,7 @@ class MessagePage extends StatefulWidget {
 class _MessagePageState extends State<MessagePage> {
   final List<Message> messages = [];
   final _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   bool canSend = false;
   User currentUser = User.phone;
   final FocusNode _focusNode = FocusNode();
@@ -40,6 +41,11 @@ class _MessagePageState extends State<MessagePage> {
         Message(text: _messageController.text.trim(), user: currentUser);
     provider.addMessage(message);
     _messageController.clear();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -101,17 +107,9 @@ class _MessagePageState extends State<MessagePage> {
                     children: [
                       if (isAnyRoomActive)
                         Expanded(
-                          child: ListView.separated(
-                            padding: const EdgeInsets.only(top: 10, bottom: 20),
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                              height: 10,
-                            ),
-                            itemBuilder: (_, index) => _MessageWidget(
-                              message: value.messages[index],
-                            ),
-                            itemCount: value.messages.length,
-                            scrollDirection: Axis.vertical,
+                          child: MessagesViewer(
+                            messages: provider.messages,
+                            scrollController: _scrollController,
                           ),
                         )
                       else
@@ -208,8 +206,50 @@ class _MessagePageState extends State<MessagePage> {
 
   _sendMessage() {
     if (_messageController.text.trim().isNotEmpty) {
+      _scrollController.jumpTo(0.0);
       _addMessage();
       _focusNode.requestFocus();
     }
+  }
+}
+
+class MessagesViewer extends StatelessWidget {
+  const MessagesViewer({
+    super.key,
+    required this.messages,
+    required this.scrollController,
+  });
+  final List<Message> messages;
+  final ScrollController scrollController;
+  addListener(BuildContext context) {
+    final provider = Provider.of<MessagePageProvider>(context, listen: false);
+    provider.getMessages();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        addListener(context);
+      },
+      backgroundColor: AppColors.backgroundColor,
+      displacement: 0,
+      edgeOffset: 0,
+      triggerMode: RefreshIndicatorTriggerMode.onEdge,
+      color: AppColors.backgroundColor,
+      child: ListView.separated(
+        reverse: true,
+        controller: scrollController,
+        padding: const EdgeInsets.only(top: 10, bottom: 20),
+        separatorBuilder: (context, index) => const SizedBox(
+          height: 10,
+        ),
+        itemBuilder: (_, index) => _MessageWidget(
+          message: messages[index],
+        ),
+        itemCount: messages.length,
+        scrollDirection: Axis.vertical,
+      ),
+    );
   }
 }
